@@ -9,9 +9,11 @@ from data.dataset import HEIGHT, WIDTH, CLASS_NUM, CHAR_LEN, lst_to_str
 def eval_acc(label, pred):
     # label: CHAR_LEN x batchsize
     # pred: CHAR_LEN x batchsize x CLASS_NUM
-    pred_res = pred.argmax(dim=2) # CHAR_LEN x batchsize
-    eq = ((pred_res == label).float().sum(dim=0)==CHAR_LEN).float() #batchsize
-    return eq.sum()/eq.size(0)
+    pred_res = pred.argmax(dim=2)  # CHAR_LEN x batchsize
+    eq = ((pred_res == label).float().sum(dim=0)
+          == CHAR_LEN).float()  # batchsize
+    return eq.sum() / eq.size(0)
+
 
 class captcha_model(pl.LightningModule):
     def __init__(self, model, lr=1e-4, optimizer=None):
@@ -68,8 +70,8 @@ class captcha_model(pl.LightningModule):
 class model_resnet(torch.nn.Module):
     def __init__(self):
         super(model_resnet, self).__init__()
-        self.resnet = models.resnet18(pretrained=False)
-        self.resnet.fc = nn.Linear(512, CHAR_LEN*CLASS_NUM)
+        self.resnet = models.resnet18(weights=None)
+        self.resnet.fc = nn.Linear(512, CHAR_LEN * CLASS_NUM)
 
     def forward(self, x):
         x = self.resnet(x)
@@ -103,9 +105,9 @@ class model_conv(torch.nn.Module):
         )
         # 128x20x7
         self.fc = nn.Sequential(
-            nn.Linear(128*(WIDTH//8)*(HEIGHT//8), 1024),
+            nn.Linear(128 * (WIDTH // 8) * (HEIGHT // 8), 1024),
             nn.ReLU(),
-            nn.Linear(1024, CLASS_NUM*CHAR_LEN)
+            nn.Linear(1024, CLASS_NUM * CHAR_LEN)
         )
         # CLASS_NUM*4
 

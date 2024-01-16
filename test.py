@@ -9,14 +9,12 @@ def test(args):
     tb_logger = pl.loggers.TensorBoardLogger(
         args.log_dir, name=args.test_name, version=2, default_hp_metric=False)
     trainer = pl.Trainer(deterministic=True,
-                         gpus=-1,
-                         auto_select_gpus=True,
                          precision=32,
                          logger=tb_logger,
                          fast_dev_run=False,
                          max_epochs=5,
                          log_every_n_steps=50,
-                         stochastic_weight_avg=True
+                         sync_batchnorm=True
                          )
     trainer.test(model, dm)
 
