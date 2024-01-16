@@ -1,6 +1,6 @@
 from model.model import captcha_model, model_conv, model_resnet
 from data.datamodule import captcha_dm
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch.optim as optim
 import torch
 import os
@@ -23,6 +23,7 @@ def main(arg):
         args.log_dir, name=args.exp_name, version=2, default_hp_metric=False)
         
     trainer = pl.Trainer(deterministic=True,
+                         accelerator="dml",
                          precision=32,
                          logger=tb_logger,
                          fast_dev_run=False,

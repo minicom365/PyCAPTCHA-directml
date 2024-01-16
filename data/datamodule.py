@@ -1,6 +1,6 @@
 from typing import Optional
-import pytorch_lightning as pl
-from pytorch_lightning import LightningDataModule
+import lightning.pytorch as pl
+from lightning.pytorch import LightningDataModule
 from data.dataset import captcha_dataset
 from torch.utils.data import DataLoader
 

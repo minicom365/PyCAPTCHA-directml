@@ -1,4 +1,4 @@
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch.nn as nn
 import torchvision.models as models
 import torch.nn.functional as F
